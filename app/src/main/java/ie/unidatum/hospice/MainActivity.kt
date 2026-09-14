@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         setContentView(R.layout.activity_main)
+        fitSystemBars(findViewById(R.id.root), keyboard = true)
         nurse = Nurse.get(this)
         Keys.warm()
 

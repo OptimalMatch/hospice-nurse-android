@@ -265,6 +265,14 @@ asking peers, so a query succeeds while the members are still elsewhere;
 front is what turns the green line on, and it is the difference between a day
 that survives a valley and one that quietly depends on a signal.
 
+**Every screen insets its own system bars.** Android 15 draws each app edge to
+edge, so a layout that sets its own padding lands under the status bar at the
+top and under the navigation bar at the foot, with the system's clock drawn
+light over a light background. `fitSystemBars` in `Insets.kt` keeps the
+layout's own padding, adds the system bars to it, and asks for dark bar icons.
+Pass `keyboard = true` and the foot of a form rises with the keyboard rather
+than hiding behind it.
+
 **The engine runs one replication at a time.** Asking for four in a row
 leaves three unstarted. `Nurse.ensureFollowing` asks for each in turn, comes
 back to the ones still outstanding, and stops when nothing is left — and the
@@ -283,8 +291,9 @@ nobody tapping anything.
 - Location comes from the phone's last known fix, which keeps arrival instant
   indoors. A deployment that needs a fresh fix for every arrival would ask for
   one and wait.
-- The signature pad takes the whole of its own area, so a long note is
-  scrolled from the left margin.
+- The signature pad owns every touch that lands on it, which is what a
+  signature needs; the rest of the form scrolls from the margins beside it,
+  and the action that closes the visit is pinned below the scrolling area.
 - The debug build only. A release build needs a signing key, and no ProGuard
   rules are written.
 - The demo data is three patients in one branch. Payer and federal interfaces

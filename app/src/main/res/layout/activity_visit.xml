@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg">
+<!--
+  The visit scrolls, and the action that ends it stays pinned at the foot. A
+  signature pad has to own every touch that lands on it, or a signature comes
+  out as a scroll, so the close button sits outside the scrolling area where a
+  finger can always reach it.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/bg">
+
+<ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="vertical" android:padding="16dp">
 
@@ -45,14 +55,21 @@
             android:layout_width="match_parent" android:layout_height="180dp"
             android:background="@drawable/card" android:layout_marginTop="6dp"/>
         <Button android:id="@+id/clearSig" android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="clear" style="?android:attr/borderlessButtonStyle"/>
-
-        <Button android:id="@+id/complete" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Chart and close the visit" android:layout_marginTop="10dp"
-            android:backgroundTint="@color/accent" android:textColor="#FFFFFF"/>
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="8dp"
-            android:paddingBottom="24dp" android:textSize="12sp" android:textColor="@color/muted"
+            android:text="clear" android:textColor="@color/accent" style="?android:attr/borderlessButtonStyle"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="4dp"
+            android:paddingBottom="8dp" android:textSize="12sp" android:textColor="@color/muted"
             android:text="Everything here writes to the node in this phone. A link is needed for none of it."/>
     </LinearLayout>
 </LinearLayout>
 </ScrollView>
+
+<LinearLayout android:id="@+id/footer" android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:visibility="gone" android:background="@color/bg"
+    android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingTop="8dp" android:paddingBottom="12dp">
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/line"
+        android:layout_marginBottom="10dp"/>
+    <Button android:id="@+id/complete" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Chart and close the visit"
+        android:backgroundTint="@color/accent" android:textColor="#FFFFFF"/>
+</LinearLayout>
+</LinearLayout>

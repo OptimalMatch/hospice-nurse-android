@@ -25,6 +25,7 @@ class VisitActivity : AppCompatActivity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         setContentView(R.layout.activity_visit)
+        fitSystemBars(findViewById(R.id.root), keyboard = true)
         nurse = Nurse.get(this)
         val id = intent.getStringExtra("visit") ?: return finish()
         visit = nurse.day.firstOrNull { it.id == id } ?: return finish()
@@ -65,7 +66,9 @@ class VisitActivity : AppCompatActivity() {
             isEnabled = !arrived
             text = if (arrived) "arrived ${nurse.localTime(v.arrived)}" else "Arrive"
         }
-        findViewById<LinearLayout>(R.id.body).visibility = if (arrived) android.view.View.VISIBLE else android.view.View.GONE
+        val show = if (arrived) android.view.View.VISIBLE else android.view.View.GONE
+        findViewById<LinearLayout>(R.id.body).visibility = show
+        findViewById<LinearLayout>(R.id.footer).visibility = show
         Thread {
             val open = nurse.openWaste(v)
             ui.post {

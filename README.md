@@ -34,11 +34,13 @@ blurred out of the screenshots.
 
 ### 1. The day is on the phone
 
-<img src="docs/screenshots/1-day.png" width="360" alt="The day list: three patients with times and addresses, the node status line, and a green line saying the day is on this phone">
+<img src="docs/screenshots/1-day.png" width="360" alt="The day list: three patients with times and addresses, the node status line, a green line saying the day is on this phone, and the branch row and buttons sitting clear of the navigation bar">
 
 The status line is the node inside the app: `rn-sm-s918u`, engine v2.369.0,
-library `hospice-demo`, 21 files, 1 peer. `signed strongbox` beside the
+library `hospice-demo`, 37 files, 1 peer. `signed strongbox` beside the
 nurse's name means the signing key went into the handset's secure element.
+Every screen sits clear of the phone's own status and navigation bars, and
+the system draws its clock and icons dark over this app's light background.
 
 Under it, in green, is the line the nurse actually cares about: **the day is
 on this phone; a signal is needed for none of it.** The app shows that only
@@ -48,13 +50,13 @@ list renders in the handset's zone.
 
 ### 2. Inside the house
 
-<img src="docs/screenshots/2-visit.png" width="360" alt="The visit screen: arrived at 20:45, the comfort kit medicines, buttons for a dose and a disposal, a line about a disposal awaiting a witness, four symptom sliders, a note field and a signature pad">
+<img src="docs/screenshots/2-visit.png" width="360" alt="The visit screen: arrived at 21:42, the comfort kit medicines, buttons for a dose and a disposal, a line about a disposal awaiting a witness, four symptom sliders, a note field, a signature pad, and the close button pinned at the foot">
 
 Arrive stamps the time and the place and signs both. The claim is the exact
 string that gets signed:
 
 ```
-unidatum-hospice-visit/v1|rn-sm-s918u|v-2026-09-13-1|arrived|-89.367429|30.307361|2026-09-14T01:45:37.172155Z
+unidatum-hospice-visit/v1|rn-sm-s918u|v-2026-09-13-3|arrived|-89.367442|30.307299|2026-09-14T02:42:46.229446Z
 ```
 
 **In the house** is the comfort kit, read from the patient's own record on
@@ -64,31 +66,35 @@ route and the time.
 The four sliders are the symptom scores a hospice chart carries — pain,
 breathing, nausea, agitation, each 0 to 10. They and the note are written to
 the visit as the nurse works, so a visit interrupted halfway keeps what was
-already charted.
+already charted, and a visit opened again shows back what it holds.
+
+**Chart and close the visit** stays pinned below the scrolling area. A
+signature pad has to own every touch that lands on it, so the action that
+ends the visit lives where a finger can always reach it.
 
 ### 3. A disposal, with a witness
 
-<img src="docs/screenshots/3-dispose.png" width="360" alt="The disposal dialog: Morphine sulfate, 12 mg of 20 mg, sharps container witnessed, and a line explaining the witness signs from their own handset">
+<img src="docs/screenshots/3-dispose.png" width="360" alt="The disposal dialog: Morphine sulfate, 2.5 mg of 10 mg, sharps container witnessed, and a line explaining the witness signs from their own handset">
 
 Wasting a controlled substance takes two clinicians. The nurse fills in the
 drug, the amount and the method, and signs their half:
 
 ```
-unidatum-hospice-waste/v1|nurse|rn-sm-s918u|v-2026-09-13-1-waste-555950685|Morphine sulfate|12 mg of 20 mg|sharps container, witnessed|2026-09-14T01:45:55.950685Z
+unidatum-hospice-waste/v1|nurse|rn-sm-s918u|v-2026-09-13-3-waste-317320876|Morphine sulfate|2.5 mg of 10 mg|sharps container, witnessed|2026-09-14T02:43:17.320876Z
 ```
 
 The record then reads **1 disposal is waiting for a witness's signature** —
 on the visit screen and in the day list — until the second signature lands.
 
 The witness signs on their own handset. In this run a second clinician,
-`rn-a-quinn`, opened Witness a disposal on another node, saw the open record
-and signed it with a key generated on that device. Three minutes later the
-phone's copy carried both halves:
+`rn-a-quinn`, worked from another node with `tools/witness.mjs`, saw the open
+record and signed it with a key generated on that machine. Under two minutes
+later the phone's copy carried both halves:
 
 | field | written by | at |
 |---|---|---|
-| `waste_claim`, `waste_signature`, `waste_public_key` | `rn-sm-s918u`, on the phone | 01:45:55 |
-| `witness_claim`, `witness_signature`, `witness_public_key` | `rn-a-quinn`, on their own node | 01:48:53 |
+| `waste_claim`, `waste_signature`, `waste_public_key` | `rn-sm-s918u`, on the phone | 02:43:17 |
+| `witness_claim`, `witness_signature`, `witness_public_key` | `rn-a-quinn`, on their own node | 02:44:55 |
 
 One document, two public keys, and neither writer overwrote the other. That
 is the per-field merge policy doing its job: the two clinicians touched
@@ -96,18 +102,18 @@ different fields of the same record, and the engine kept both.
 
 ### 4. The caregiver signs
 
-<img src="docs/screenshots/4-close.png" width="360" alt="The visit ready to close: symptom scores, the nurse's note, the caregiver's name and a finger-drawn signature">
+<img src="docs/screenshots/4-close.png" width="360" alt="The visit ready to close: the caregiver's name Eileen Kearns above a signature reading E K, drawn with a finger, and a clear button under the pad">
 
 The family caregiver signs on the glass with a finger. The pad exports a PNG
-and the visit carries it inline, 14 KB in this run, beside the caregiver's
+and the visit carries it inline, 12 KB in this run, beside the caregiver's
 name. Closing the visit writes a departure claim signed the same way as the
 arrival, and sets the visit to `charted`.
 
 ### 5. Charted, and waiting for a link
 
-<img src="docs/screenshots/5-charted.png" width="360" alt="The day list with Margaret Dolan charted, an amber line saying one visit is charted here and waiting for a link">
+<img src="docs/screenshots/5-charted.png" width="360" alt="The day list with all three visits charted, an amber line saying three visits are charted here and waiting for a link">
 
-Amber says what is held here and yet to travel: **1 visit charted here and
+Amber says what is held here and yet to travel: **3 visits charted here and
 waiting for a link.** With the branch reachable the line clears within a sync
 interval. With the phone in a valley it stays, and the nurse carries on to
 the next house.
@@ -119,23 +125,23 @@ checks the signature over it. The public key rides on the document, so a
 compliance reviewer runs this against any node that holds the collections and
 needs no key exchange with the handset.
 
-The lines for one visit, from the phone and again from the branch node. The run covered both visits the phone had charted:
+The lines for the visit above, from the phone and again from the branch node. The run covered all three visits the phone had charted:
 
 ```
 $ node tools/verify.mjs http://<branch>:7485
-VERIFIED  v-2026-09-13-2-arrived claim matches its own fields
-VERIFIED  v-2026-09-13-2-arrived signature over the claim
-VERIFIED  v-2026-09-13-2-left claim matches its own fields
-VERIFIED  v-2026-09-13-2-left signature over the claim
-VERIFIED  v-2026-09-13-2 clinician signature
-VERIFIED  v-2026-09-13-2 carries the caregiver's signature   Nuala Whelan, 17802 bytes
-VERIFIED  v-2026-09-13-2-waste-849616574 nurse claim matches the document
-VERIFIED  v-2026-09-13-2-waste-849616574 nurse signature
-VERIFIED  v-2026-09-13-2-waste-849616574 witness claim matches the document
-VERIFIED  v-2026-09-13-2-waste-849616574 witness signature
-VERIFIED  v-2026-09-13-2-waste-849616574 the two halves are two different keys   rn-sm-s918u and rn-a-quinn
+VERIFIED  v-2026-09-13-3-arrived claim matches its own fields
+VERIFIED  v-2026-09-13-3-arrived signature over the claim
+VERIFIED  v-2026-09-13-3-left claim matches its own fields
+VERIFIED  v-2026-09-13-3-left signature over the claim
+VERIFIED  v-2026-09-13-3 clinician signature
+VERIFIED  v-2026-09-13-3 carries the caregiver's signature   Eileen Kearns, 11661 bytes
+VERIFIED  v-2026-09-13-3-waste-317320876 nurse claim matches the document
+VERIFIED  v-2026-09-13-3-waste-317320876 nurse signature
+VERIFIED  v-2026-09-13-3-waste-317320876 witness claim matches the document
+VERIFIED  v-2026-09-13-3-waste-317320876 witness signature
+VERIFIED  v-2026-09-13-3-waste-317320876 the two halves are two different keys   rn-sm-s918u and rn-a-quinn
 
-22 verified, 0 failed
+33 verified, 0 failed
 ```
 
 Rebuilding the claim from the document is what makes signing worth doing. A
@@ -145,7 +151,7 @@ branch node, each caught, and each then restored:
 
 | what another writer did to the record | what the verifier said |
 |---|---|
-| moved the arrival 2 km | claim matches fails; the document reads `-89.350000\|30.320000` where the signed claim reads `-89.367429\|30.307361` |
+| moved the arrival 2 km | claim matches fails; the document reads `-89.350000\|30.320000` where the signed claim reads `-89.367442\|30.307299` |
 | replaced the arrival signature with the departure's, a real signature from the right key | signature over the claim fails |
 | re-pointed the disposal at a different witness | witness claim matches fails; the signed claim still names `rn-a-quinn` |
 
@@ -157,24 +163,27 @@ holds the key can sign one.
 The engine's own output during the run, with the branch address masked:
 
 ```
-replicate patients: complete, 1 member(s) fetched — now following
-replicate visits: complete, 1 member(s) fetched — now following
-replicate medications: complete, 1 member(s) fetched — now following
-replicate visit_verification: complete, 1 member(s) fetched — now following
 sync <branch>:47810: sent 2, got 0
 go-serve: seeding visit_verification.collection to <branch>
-go-serve: seeded 2379 byte(s) of visit_verification.collection
-go-serve: merged 1 op(s), rejected 0, 1 received, in 10ms
-follow medications: 1 new member(s) fetched
+go-serve: seeded 20367 byte(s) of visit_verification.collection
+go-serve: seeding visits.collection to <branch>
+go-serve: seeded 16732 byte(s) of visits.collection
+sync <branch>:47810: sent 1, got 0
+go-serve: seeding medications.collection to <branch>
+go-serve: seeded 16186 byte(s) of medications.collection
 go-serve: seeding visits.collection.delta.parquet to <branch>
-go-serve: seeded 20636 byte(s) of visits.collection.delta.parquet
+go-serve: seeded 18030 byte(s) of visits.collection.delta.parquet
+follow medications: 1 new member(s) fetched
+follow medications: warmed 12 member(s), 39.2 KB
 ```
 
-Reading down: the phone replicated the four collections it needs, pushed its
-own commits to the branch, and served the members those commits created when
-the branch came for them. `merged 1 op(s), rejected 0` is the witness's
-signature arriving from the other node. The 20 KB member is the visit
-carrying the caregiver's PNG.
+Reading down: the arrival goes out in one sync and the branch comes straight
+back for the members it created. The disposal follows thirty seconds later on
+the medications collection, then the close, whose 18 KB member is the visit
+carrying the caregiver's PNG. The phone is serving the library as well as
+drawing from it. The last two lines run the other way: the witness's
+signature arrives from the other node, and the phone fetches the member it
+created.
 
 ## The nurse's calls (`Nurse.kt`)
 

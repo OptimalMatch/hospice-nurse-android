@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
+    android:gravity="center_vertical">
+    <TextView android:id="@+id/s_label" android:layout_width="90dp" android:layout_height="wrap_content"
+        android:textSize="14sp" android:textColor="@color/ink"/>
+    <SeekBar android:id="@+id/s_bar" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
+    <TextView android:id="@+id/s_value" android:layout_width="28dp" android:layout_height="wrap_content"
+        android:text="0" android:gravity="end" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/accent"/>
+</LinearLayout>

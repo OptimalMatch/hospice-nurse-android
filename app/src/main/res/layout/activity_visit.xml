@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg">
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="16dp">
+
+    <TextView android:id="@+id/title" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="21sp" android:textStyle="bold" android:textColor="@color/ink"/>
+    <TextView android:id="@+id/sub" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="13sp" android:textColor="@color/muted" android:paddingTop="3dp" android:paddingBottom="12dp"/>
+
+    <Button android:id="@+id/arrive" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Arrive"/>
+
+    <LinearLayout android:id="@+id/body" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:visibility="gone">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="IN THE HOUSE"
+            android:textColor="@color/muted" android:textSize="12sp" android:letterSpacing="0.10" android:paddingTop="18dp"/>
+        <TextView android:id="@+id/meds" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textSize="14sp" android:textColor="@color/ink" android:background="@drawable/card"
+            android:padding="12dp" android:layout_marginTop="6dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="6dp">
+            <Button android:id="@+id/dose" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="A dose given"/>
+            <Button android:id="@+id/waste" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Dispose"/>
+        </LinearLayout>
+        <TextView android:id="@+id/pending" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textSize="13sp" android:textColor="@color/warn" android:paddingTop="4dp" android:visibility="gone"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SYMPTOMS, 0 TO 10"
+            android:textColor="@color/muted" android:textSize="12sp" android:letterSpacing="0.10" android:paddingTop="18dp"/>
+        <LinearLayout android:id="@+id/scores" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:background="@drawable/card" android:padding="12dp" android:layout_marginTop="6dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NOTE"
+            android:textColor="@color/muted" android:textSize="12sp" android:letterSpacing="0.10" android:paddingTop="18dp"/>
+        <EditText android:id="@+id/note" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:minLines="3" android:gravity="top" android:inputType="textMultiLine|textCapSentences"
+            android:hint="what you saw, and what you did"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="THE CAREGIVER SIGNS"
+            android:textColor="@color/muted" android:textSize="12sp" android:letterSpacing="0.10" android:paddingTop="18dp"/>
+        <EditText android:id="@+id/caregiver" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="their name" android:inputType="textPersonName|textCapWords"/>
+        <ie.unidatum.hospice.SignatureView android:id="@+id/sig"
+            android:layout_width="match_parent" android:layout_height="180dp"
+            android:background="@drawable/card" android:layout_marginTop="6dp"/>
+        <Button android:id="@+id/clearSig" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="clear" style="?android:attr/borderlessButtonStyle"/>
+
+        <Button android:id="@+id/complete" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Chart and close the visit" android:layout_marginTop="10dp"
+            android:backgroundTint="@color/accent" android:textColor="#FFFFFF"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="8dp"
+            android:paddingBottom="24dp" android:textSize="12sp" android:textColor="@color/muted"
+            android:text="Everything here writes to the node in this phone. A link is needed for none of it."/>
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>

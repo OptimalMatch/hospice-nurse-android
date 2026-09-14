@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="20dp">
+    <EditText android:id="@+id/w_drug" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="drug"/>
+    <EditText android:id="@+id/w_amount" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="amount wasted"/>
+    <EditText android:id="@+id/w_method" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="method"/>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="10dp"
+        android:textSize="13sp" android:textColor="@color/muted"
+        android:text="Your signature goes on now. The witness signs from their own handset, and the record carries both."/>
+</LinearLayout>

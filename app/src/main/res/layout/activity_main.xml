@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="16dp" android:background="@color/bg">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="HOSPICE" android:textColor="@color/accent" android:textSize="12sp"
+        android:letterSpacing="0.12" android:textStyle="bold"/>
+    <TextView android:id="@+id/who" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="20sp" android:textStyle="bold" android:textColor="@color/ink" android:paddingTop="2dp"/>
+    <TextView android:id="@+id/status" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="12sp" android:textColor="@color/muted" android:paddingTop="4dp"/>
+    <TextView android:id="@+id/held" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="13sp" android:textColor="@color/done" android:paddingTop="6dp" android:visibility="gone"/>
+    <TextView android:id="@+id/unsynced" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="13sp" android:textColor="@color/warn" android:paddingTop="6dp" android:visibility="gone"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="TODAY" android:textColor="@color/muted" android:textSize="12sp"
+        android:letterSpacing="0.10" android:paddingTop="18dp" android:paddingBottom="6dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/list"
+        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
+    <TextView android:id="@+id/empty" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="@color/muted" android:textSize="14sp" android:paddingTop="8dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="BRANCH" android:textColor="@color/muted" android:textSize="12sp"
+        android:letterSpacing="0.10" android:paddingTop="14dp"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <EditText android:id="@+id/host" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content" android:hint="branch host" android:inputType="text" android:textSize="15sp"/>
+        <EditText android:id="@+id/library" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content" android:hint="library" android:inputType="text" android:textSize="15sp"/>
+        <Button android:id="@+id/rejoin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rejoin"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+        <Button android:id="@+id/witness" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content" android:text="Witness a disposal"/>
+        <Button android:id="@+id/log" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Node log" style="?android:attr/borderlessButtonStyle"/>
+    </LinearLayout>
+</LinearLayout>

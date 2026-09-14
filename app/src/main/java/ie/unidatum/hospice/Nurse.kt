@@ -27,6 +27,11 @@ data class Visit(val doc: JSONObject) {
     val left get() = doc.optString("left_at")
     val status get() = doc.optString("status", "scheduled")
     val synced get() = doc.optBoolean("_synced", false)
+    /** What a visit already charted carries, so the screen can show it back rather than start blank. */
+    val note get() = doc.optString("note")
+    val symptoms: JSONObject? get() = doc.optJSONObject("symptoms")
+    val caregiver get() = doc.optString("caregiver_name")
+    val signed get() = doc.optString("caregiver_signature").isNotEmpty()
 }
 
 data class Patient(val doc: JSONObject) {
@@ -239,12 +244,14 @@ class Nurse private constructor(ctx: Context) {
     fun close(v: Visit, caregiverName: String, caregiverSignaturePng: String, lon: Double?, lat: Double?) {
         val at = now()
         val claim = "$CLAIM_VISIT|$clinicianId|${v.id}|left|${fmt(lon)}|${fmt(lat)}|$at"
-        local.update("visits", JSONObject().put("_id", v.id), JSONObject()
+        val set = JSONObject()
             .put("left_at", at).put("status", "charted")
             .put("caregiver_name", caregiverName)
-            .put("caregiver_signature", caregiverSignaturePng)
             .put("clinician_claim", claim).put("clinician_signature", Keys.sign(claim))
-            .put("clinician_public_key", Keys.publicKeyB64()))
+            .put("clinician_public_key", Keys.publicKeyB64())
+        // An empty pad leaves the signature already on the record where it is.
+        if (caregiverSignaturePng.isNotEmpty()) set.put("caregiver_signature", caregiverSignaturePng)
+        local.update("visits", JSONObject().put("_id", v.id), set)
         val doc = JSONObject()
             .put("_id", "${v.id}-left").put("visit_id", v.id).put("clinician_id", clinicianId)
             .put("event", "left").put("at", at)

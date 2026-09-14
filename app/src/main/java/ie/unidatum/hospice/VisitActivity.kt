@@ -21,6 +21,8 @@ class VisitActivity : AppCompatActivity() {
     private val ui = android.os.Handler(android.os.Looper.getMainLooper())
     private val scores = listOf("pain", "breathing", "nausea", "agitation")
     private val bars = mutableMapOf<String, SeekBar>()
+    /** Set once the form has been filled from the document, so a redraw leaves typing alone. */
+    private var loaded = false
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
@@ -69,6 +71,18 @@ class VisitActivity : AppCompatActivity() {
         val show = if (arrived) android.view.View.VISIBLE else android.view.View.GONE
         findViewById<LinearLayout>(R.id.body).visibility = show
         findViewById<LinearLayout>(R.id.footer).visibility = show
+
+        // A visit charted earlier opens showing what it holds. Filling the form
+        // from the document is what keeps a second close from writing blanks
+        // over a note, the scores and the caregiver's name.
+        if (arrived && !loaded) {
+            loaded = true
+            findViewById<EditText>(R.id.note).setText(v.note)
+            findViewById<EditText>(R.id.caregiver).setText(v.caregiver)
+            v.symptoms?.let { s -> for ((k, bar) in bars) bar.progress = s.optInt(k, 0) }
+            findViewById<Button>(R.id.complete).text =
+                if (v.status == "charted") "Chart and close the visit again" else "Chart and close the visit"
+        }
         Thread {
             val open = nurse.openWaste(v)
             ui.post {
@@ -138,11 +152,27 @@ class VisitActivity : AppCompatActivity() {
     private fun complete() {
         val v = visit ?: return
         val sig = findViewById<SignatureView>(R.id.sig)
+        // A fresh visit wants a signature. One already closed keeps the signature
+        // it has, so a nurse correcting a note leaves the caregiver's mark alone.
+        if (sig.isEmpty && !v.signed) { toast("The caregiver signs here before the visit closes."); return }
+        if (v.status == "charted") {
+            AlertDialog.Builder(this)
+                .setTitle("Close this visit again?")
+                .setMessage("It was charted at ${nurse.localTime(v.left)}. Closing it again replaces the note, the scores and the caregiver's name with what is on this screen.")
+                .setPositiveButton("replace") { _, _ -> write(v) }
+                .setNegativeButton("leave it", null).show()
+            return
+        }
+        write(v)
+    }
+
+    /** The charting and the close, as one piece of work on this phone's node. */
+    private fun write(v: Visit) {
+        val sig = findViewById<SignatureView>(R.id.sig)
         val name = findViewById<EditText>(R.id.caregiver).text.toString().trim()
-        if (sig.isEmpty) { toast("The caregiver signs here before the visit closes."); return }
         val note = findViewById<EditText>(R.id.note).text.toString().trim()
         val symptoms = JSONObject().apply { for ((k, b) in bars) put(k, b.progress) }
-        val png = sig.toBase64Png()
+        val png = if (sig.isEmpty) "" else sig.toBase64Png()
         val f = fix()
         Thread {
             try {

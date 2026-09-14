@@ -119,23 +119,23 @@ checks the signature over it. The public key rides on the document, so a
 compliance reviewer runs this against any node that holds the collections and
 needs no key exchange with the handset.
 
-Against the phone, and against the branch node, in this run:
+The lines for one visit, from the phone and again from the branch node. The run covered both visits the phone had charted:
 
 ```
 $ node tools/verify.mjs http://<branch>:7485
-VERIFIED  v-2026-09-13-1-arrived claim matches its own fields
-VERIFIED  v-2026-09-13-1-arrived signature over the claim
-VERIFIED  v-2026-09-13-1-left claim matches its own fields
-VERIFIED  v-2026-09-13-1-left signature over the claim
-VERIFIED  v-2026-09-13-1 clinician signature
-VERIFIED  v-2026-09-13-1 carries the caregiver's signature   Sean Dolan, 14386 bytes
-VERIFIED  v-2026-09-13-1-waste-555950685 nurse claim matches the document
-VERIFIED  v-2026-09-13-1-waste-555950685 nurse signature
-VERIFIED  v-2026-09-13-1-waste-555950685 witness claim matches the document
-VERIFIED  v-2026-09-13-1-waste-555950685 witness signature
-VERIFIED  v-2026-09-13-1-waste-555950685 the two halves are two different keys   rn-sm-s918u and rn-a-quinn
+VERIFIED  v-2026-09-13-2-arrived claim matches its own fields
+VERIFIED  v-2026-09-13-2-arrived signature over the claim
+VERIFIED  v-2026-09-13-2-left claim matches its own fields
+VERIFIED  v-2026-09-13-2-left signature over the claim
+VERIFIED  v-2026-09-13-2 clinician signature
+VERIFIED  v-2026-09-13-2 carries the caregiver's signature   Nuala Whelan, 17802 bytes
+VERIFIED  v-2026-09-13-2-waste-849616574 nurse claim matches the document
+VERIFIED  v-2026-09-13-2-waste-849616574 nurse signature
+VERIFIED  v-2026-09-13-2-waste-849616574 witness claim matches the document
+VERIFIED  v-2026-09-13-2-waste-849616574 witness signature
+VERIFIED  v-2026-09-13-2-waste-849616574 the two halves are two different keys   rn-sm-s918u and rn-a-quinn
 
-11 verified, 0 failed
+22 verified, 0 failed
 ```
 
 Rebuilding the claim from the document is what makes signing worth doing. A
@@ -243,10 +243,17 @@ Three visits appear. Ports on the phone are 7482 (API, bound on all
 interfaces so a laptop on the same network can query the phone's copy), 47804
 sync and 47805 DHT.
 
-To play the witness from a laptop, run a second node in the same library,
-generate a P-256 key, and update the open disposal with a `witness_claim` of
-the shape shown above. `tools/verify.mjs` then reports two different keys on
-the one document.
+To play the witness from a laptop, point `tools/witness.mjs` at a node in the
+same library:
+
+```sh
+node tools/witness.mjs http://127.0.0.1:7485 rn-a-quinn
+```
+
+It generates a P-256 key on first run and keeps it beside the script, so the
+same witness keeps one key across disposals, then signs every disposal the node
+holds that is still open. `tools/verify.mjs` afterwards reports two different
+keys on the one document.
 
 ## Three things worth knowing
 
